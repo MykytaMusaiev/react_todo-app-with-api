@@ -1,21 +1,21 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
   todo: Todo;
   removeTodo: (arg: number) => Promise<boolean>;
-  isAdding: boolean;
+  isProcessing: boolean;
   onUpdate: (id: number, data: Partial<Todo>) => Promise<boolean>;
   editingTodoId: number | null;
   onEdit: (todoId: number | null) => void;
 }
 
-export const TodoInfo: React.FC<Props> = ({
+const TodoInfoComponent: React.FC<Props> = ({
   todo,
   removeTodo,
-  isAdding,
+  isProcessing,
   onUpdate,
   editingTodoId,
   onEdit,
@@ -31,7 +31,7 @@ export const TodoInfo: React.FC<Props> = ({
     }
   }, [isEditing]);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     const trimmedTitle = newTitle.trim();
 
     if (trimmedTitle === todo.title) {
@@ -55,26 +55,39 @@ export const TodoInfo: React.FC<Props> = ({
     if (updateSuccessfull) {
       onEdit(null);
     }
-  };
+  }, [newTitle, todo.title, todo.id, onEdit, removeTodo, onUpdate]);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') {
-      onEdit(null);
-    }
-  };
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Escape') {
+        onEdit(null);
+      }
+    },
+    [onEdit],
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleSave();
-  };
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      handleSave();
+    },
+    [handleSave],
+  );
 
-  const handleNewTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTitle(e.target.value);
-  };
+  const handleNewTitle = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setNewTitle(e.target.value);
+    },
+    [],
+  );
 
-  const handleDoubleClick = () => {
+  const handleDoubleClick = useCallback(() => {
     onEdit(todo.id);
-  };
+  }, [onEdit, todo.id]);
+
+  const handleToggle = useCallback(() => {
+    onUpdate(todo.id, { completed: !todo.completed });
+  }, [onUpdate, todo.id, todo.completed]);
 
   return (
     <>
@@ -86,8 +99,8 @@ export const TodoInfo: React.FC<Props> = ({
             type="checkbox"
             className="todo__status"
             checked={todo.completed}
-            onChange={() => onUpdate(todo.id, { completed: !todo.completed })}
-            disabled={isAdding}
+            onChange={handleToggle}
+            disabled={isProcessing}
           />
         </label>
         {isEditing ? (
@@ -118,17 +131,15 @@ export const TodoInfo: React.FC<Props> = ({
               className="todo__remove"
               data-cy="TodoDelete"
               onClick={() => removeTodo(todo.id)}
-              disabled={isAdding}
+              disabled={isProcessing}
             >
               ×
             </button>
           </>
         )}
-
-        {/* overlay will cover the todo while it is being deleted or updated */}
         <div
           data-cy="TodoLoader"
-          className={cn('modal overlay', { 'is-active': isAdding })}
+          className={cn('modal overlay', { 'is-active': isProcessing })}
         >
           <div className="modal-background has-background-white-ter" />
           <div className="loader" />
@@ -138,4 +149,4 @@ export const TodoInfo: React.FC<Props> = ({
   );
 };
 
-export default TodoInfo;
+export const TodoInfo = React.memo(TodoInfoComponent);
