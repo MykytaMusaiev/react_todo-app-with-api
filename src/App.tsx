@@ -5,8 +5,7 @@ import { UserWarning } from './UserWarning';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { TodoApp } from './components/TodoApp';
-
-const USER_ID = 3334;
+import { USER_ID } from './constant/const';
 
 export const App: React.FC = () => {
   if (!USER_ID) {

@@ -6,23 +6,6 @@ interface Props {
 }
 
 export const Errormessage: React.FC<Props> = ({ errorMessage, onClose }) => {
-  // const [testError, setTestError] = useState('');
-
-  // useEffect(() => {
-  //   if (isError) {
-  //     setErrorMessage(ErrorMessages.LOAD_FAILED);
-  //     const timer = setTimeout(() => {
-  //       setErrorMessage('');
-  //     }, 3000);
-
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [isError]);
-
-  // const handleTestClose = () => {
-  //   setTestError(false);
-  // };
-
   return (
     <div
       data-cy="ErrorNotification"
@@ -39,7 +22,6 @@ export const Errormessage: React.FC<Props> = ({ errorMessage, onClose }) => {
         type="button"
         className="delete"
         onClick={onClose}
-        // onClick={handleTestClose}
       />
       {errorMessage}
     </div>
