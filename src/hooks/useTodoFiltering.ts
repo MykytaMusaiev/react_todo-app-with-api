@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Todo } from '../types/Todo';
+import { Todo } from '../types/todo';
 import { TodosStatus } from '../types/enums';
 
 export const useTodoFiltering = (todoList: Todo[], tempTodo: Todo | null) => {

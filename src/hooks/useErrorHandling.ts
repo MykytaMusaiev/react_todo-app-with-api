@@ -9,10 +9,12 @@ export const useErrorHandling = () => {
 
     if (errorTimerRef.current) {
       clearTimeout(errorTimerRef.current);
+      errorTimerRef.current = null;
     }
 
     errorTimerRef.current = setTimeout(() => {
       setErrorMessage('');
+      errorTimerRef.current = null;
     }, 3000);
   }, []);
 

@@ -12,11 +12,11 @@ function wait(delay: number) {
 // To have autocompletion and avoid mistypes
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
-function request<T>(
+function request<TResponse, TData>(
   url: string,
   method: RequestMethod = 'GET',
-  data: any = null, // we can send any data to the server
-): Promise<T> {
+  data: TData | null = null,
+): Promise<TResponse> {
   const options: RequestInit = { method };
 
   if (data) {
@@ -40,8 +40,10 @@ function request<T>(
 }
 
 export const client = {
-  get: <T>(url: string) => request<T>(url),
-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
-  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
-  delete: (url: string) => request(url, 'DELETE'),
+  get: <TResponse>(url: string) => request<TResponse, null>(url),
+  post: <TResponse, TData>(url: string, data: TData) =>
+    request<TResponse, TData>(url, 'POST', data),
+  patch: <TResponse, TData>(url: string, data: TData) =>
+    request<TResponse, TData>(url, 'PATCH', data),
+  delete: <TResponse>(url: string) => request<TResponse, null>(url, 'DELETE'),
 };

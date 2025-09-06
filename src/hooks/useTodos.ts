@@ -1,13 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Todo } from '../types/Todo';
-import {
-  getTodos,
-  postTodos,
-  deleteTodo,
-  updateTodo,
-  USER_ID,
-} from '../api/todos';
+import { Todo } from '../types/todo';
+import { getTodos, postTodos, deleteTodo, updateTodo } from '../api/todos';
 import { ErrorMessages } from '../types/enums';
+import { USER_ID } from '../constant/const';
 
 export const useTodos = (
   handleSetErrorMessage: (message: string) => void,

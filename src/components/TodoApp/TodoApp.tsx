@@ -1,45 +1,16 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-// import { useQuery } from '@tanstack/react-query';
 import { TodoList } from '../TodoList';
 import { Footer } from '../Footer';
 import { Header } from '../Header';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Errormessage } from '../Errormessage/Errormessage';
-import { Todo } from '../../types/Todo';
+import { Todo } from '../../types/todo';
 import { useTodos } from '../../hooks/useTodos';
 import { ErrorMessages } from '../../types/enums';
 import { useErrorHandling } from '../../hooks/useErrorHandling';
 import { useTodoFiltering } from '../../hooks/useTodoFiltering';
 
 export const TodoApp = () => {
-  // ### Tanstask Query
-  // const {
-  //   data: todos,
-  //   isLoading,
-  //   isError,
-  //   error,
-  //   status
-  // } = useQuery({
-  //   queryKey: ['todos'],
-  //   queryFn: getTodos,
-  // });
-  // console.log(query.data);
-  // Mutations
-  // const mutation = useMutation({
-  //   mutationFn: postTodo,
-  //   onSuccess: () => {
-  //     // Invalidate and refetch
-  //     queryClient.invalidateQueries({ queryKey: ['todos'] });
-  //   },
-  // onError: (mutationError) => {
-  //   if (mutationError.response.status === 422) {
-  //     setErrorMessage(ErrorMessages.EMPTY_TITLE);
-  //   } else {
-  //     setErrorMessage(ErrorMessages.ADD_FAILED);
-  //   }
-  // },
-  // });
-
   const [title, setTitle] = useState('');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
@@ -117,7 +88,7 @@ export const TodoApp = () => {
           title={title}
           setTitle={e => setTitle(e.target.value)}
           onSubmit={handleSubmit}
-          isAdding={tempTodo !== null}
+          isAdding={!!tempTodo}
           hasTodos={todoList.length > 0}
           isAllCompleted={isAllCompleted}
           onToggleAll={handleToggleAllWrapper}
